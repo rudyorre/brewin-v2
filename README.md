@@ -1,6 +1,10 @@
 # CS 131 Fall 2022: Project Starter
 
-Hey there! This is a template repository that contains the necessary boilerplate for [CS 131](https://ucla-cs-131.github.io/fall-22/)'s quarter-long project: making an interpreter. You can read the [spec for the project on Google Docs](#TODO).
+Hey there! This is a template repository that contains the necessary boilerplate for [CS 131](https://ucla-cs-131.github.io/fall-22/)'s quarter-long project: making an interpreter. The project specs are as follows:
+
+1. [Project 1 Spec](https://docs.google.com/document/d/17Q4EPgHLMlMuQABhmgTpk_Ggxij0DZwvPQO2uzVVPzk/)
+2. Project 2 - coming soon!
+3. Project 3 - coming soon!
 
 There are three stages to the project; students are currently at the first. Thus, this folder contains the necessary bootstrapping code:
 
@@ -9,13 +13,10 @@ There are three stages to the project; students are currently at the first. Thus
 
 Note: **we will update this repository with canonical solutions once the project deadline is over**.
 
-Some notes on your submission:
+Some notes on your submission (for Project 1; we'll update this for later projects):
 
-1. You **must have a top-level, versioned `interpreter.py` file** that **exports the `Interpreter` class**. If not, **your code will not run on our autograder**.
-    - for Project 1, your file should be named `interpreterv1.py`
-    - for Project 2, your file should be named `interpreterv2.py`
-    - for Project 3, your file should be named `interpreterv3.py`
-2. Otherwise, you can split your code into however many `.py` files as you wish; however, **they must have the `.py` extension!**
+1. You **must have a top-level, versioned `interpreterv1.py` file** that **exports the `Interpreter` class**. If not, **your code will not run on our autograder**.
+2. You may also submit one or more additional `.py` modules that your interpreter uses, if you decide to break up your solution into multiple `.py` files.
 
 You can find out more about our autograder, including how to run it, in [its accompanying repo](#TODO).
 
