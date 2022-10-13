@@ -12,9 +12,9 @@ Note: **we will update this repository with canonical solutions once the project
 Some notes on your submission:
 
 1. You **must have a top-level, versioned `interpreter.py` file** that **exports the `Interpreter` class**. If not, **your code will not run on our autograder**.
-  - for Project 1, your file should be named `interpreterv1.py`
-  - for Project 2, your file should be named `interpreterv2.py`
-  - for Project 3, your file should be named `interpreterv3.py`
+    - for Project 1, your file should be named `interpreterv1.py`
+    - for Project 2, your file should be named `interpreterv2.py`
+    - for Project 3, your file should be named `interpreterv3.py`
 2. Otherwise, you can split your code into however many `.py` files as you wish; however, **they must have the `.py` extension!**
 
 You can find out more about our autograder, including how to run it, in [its accompanying repo](#TODO).
