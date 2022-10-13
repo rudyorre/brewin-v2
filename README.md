@@ -18,7 +18,7 @@ Some notes on your submission (for Project 1; we'll update this for later projec
 1. You **must have a top-level, versioned `interpreterv1.py` file** that **exports the `Interpreter` class**. If not, **your code will not run on our autograder**.
 2. You may also submit one or more additional `.py` modules that your interpreter uses, if you decide to break up your solution into multiple `.py` files.
 
-You can find out more about our autograder, including how to run it, in [its accompanying repo](#TODO).
+You can find out more about our autograder, including how to run it, in [its accompanying repo](https://github.com/UCLA-CS-131/fall-22-autograder).
 
 ## Licensing and Attribution
 
