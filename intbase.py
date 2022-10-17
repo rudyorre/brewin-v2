@@ -6,7 +6,7 @@ class ErrorType(Enum):
   NAME_ERROR = 2    # if a variable or function name can't be found
   SYNTAX_ERROR = 3  # used for syntax errors
   # Add others here
-  
+
 
 class InterpreterBase:
 
@@ -37,7 +37,7 @@ class InterpreterBase:
   COMMENT_DEF = '#'
   RESULT_DEF = 'result'
   OBJECT_DEF = 'object'
-  THIS_DEF = 'this' 
+  THIS_DEF = 'this'
 
   # v3 defs
   LAMBDA_DEF = 'lambda'
@@ -45,7 +45,7 @@ class InterpreterBase:
 
   # methods
   def __init__(self, console_output=True, input=None):
-    self.console_output = console_output 
+    self.console_output = console_output
     self.input = input  # if not none, then read input from passed-in list
     self.reset()
 
@@ -58,7 +58,7 @@ class InterpreterBase:
 
   # Students must implement this
   def run(self, program):
-    pass                    
+    pass
 
   def get_input(self):
     if not self.input:
@@ -81,7 +81,7 @@ class InterpreterBase:
        description = ': ' + description
     else:
        description = ''
-    if not line_num:
+    if line_num is None:
       raise Exception(f'{error_type}{description}')
     else:
       raise Exception(f'{error_type} on line {line_num}{description}')
@@ -103,7 +103,7 @@ class InterpreterBase:
    indents = [len(line) - len(line.lstrip(' ')) for line in program]
    self.__validate_blocks(first_tokens,indents)
    self.__validate_indentation(first_tokens,indents)
-   
+
   def __validate_blocks(self, first_tokens, indents):
     stack = []
     for i in range(0,len(first_tokens)):
