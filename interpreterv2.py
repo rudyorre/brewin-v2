@@ -59,7 +59,7 @@ class Interpreter(InterpreterBase):
 
   def _process_line(self):
     # TODO: remove
-    # self.env_manager.print_env(types=True)
+    self.env_manager.print_env(types=True)
     if self.trace_output:
       print(f"{self.ip:04}: {self.program[self.ip].rstrip()}")
     tokens = self.tokenized_program[self.ip]
@@ -213,13 +213,28 @@ class Interpreter(InterpreterBase):
           return
     super().error(ErrorType.SYNTAX_ERROR,"Missing endif", self.ip) #no
 
-  def _return(self,args):
+  def _return(self, args):
+    '''
+    Returns a value for user-defined functions.
+
+    If a return were to happen within a nested scope (such as an if-statement within the function),
+    the scopes created by these structures must be destroyed before moving on. Therefore this function
+    will parse through the rest of the user-defined function until it finds an `endfunc` statement,
+    while doing so it will pop a scope for every `end` statement it finds.
+    '''
     if not args:
       self._endfunc()
       return
     value = self._eval_expression(args)
     # self._set_value(InterpreterBase.RESULT_DEF, value_type)   # return always passed back in result
-    self.env_manager.set_return(value)
+    symbol = {Type.INT : 'resulti', Type.BOOL : 'resultb', Type.STRING : 'results'}[value.type()]
+    self.env_manager.set_return(symbol, value)
+    for line_num in range(self.ip + 1, len(self.tokenized_program)):
+      tokens = self.tokenized_program[line_num]
+      if not tokens:
+        continue
+      if tokens[0] == InterpreterBase.ENDIF_DEF or tokens[0] == InterpreterBase.ENDWHILE_DEF:
+        self.env_manager.pop_scope() # TODO: not sure if this is good placement or not
     self._endfunc()
 
   def _while(self, args):

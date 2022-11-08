@@ -13,11 +13,32 @@ func absval
     return ret
 endfunc
 
+func f
+    if True
+        if False
+
+        else
+            if True
+                if False
+
+                else
+
+                endif
+                return True
+            endif
+        endif
+    else
+
+    endif
+endfunc
+
 func main void
     var int val output
     assign val -5
     # funccall absval val outputfunccall print "The absolute value is: " output
     # funccall print "Did I negate the input value? " result
-    funccall print val
-    funccall print output
+    # funccall print val
+
+    funccall f
+    funccall print resultb
 endfunc

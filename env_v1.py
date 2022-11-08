@@ -52,12 +52,12 @@ class EnvironmentManager:
         # If the variable doesn't already exist, add it to the most recent scope
         self.environment[-1][symbol] = value
 
-    def set_return(self, value):
+    def set_return(self, symbol, value):
         '''
         Sets the global return value (based by type eventually). To make it
         global, this will be in the top-level scope.
         '''
-        self.environment[0]['return'] = value
+        self.environment[0][symbol] = value
 
     def push_scope(self):
         '''Creates a new scope.'''
