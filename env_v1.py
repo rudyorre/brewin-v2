@@ -42,6 +42,7 @@ class EnvironmentManager:
 
     def set(self, symbol, value):
         '''Sets the data associated with a variable name.'''
+        # self.print_env(types=True)
         # Assign value to most recent occurrence of the variable
         for scope in reversed(self.environment):
             if symbol in scope:

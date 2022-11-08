@@ -1,12 +1,17 @@
 func f
+    funccall print a  # print 5
     var string a
-    assign a "hello"
+    assign a "foobar"
+    funccall print a  # print foobar
+    var bool b
 endfunc
 
 func main
     var int a
-    assign a 4
+    assign a 5
     funccall f
-    funccall print a
-    # assign a "world"
+    funccall print a # print 5
+    funccall print b # name error b is out of scope
+    var int c
+    assign c 1
 endfunc

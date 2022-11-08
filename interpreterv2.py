@@ -58,6 +58,8 @@ class Interpreter(InterpreterBase):
       self._process_line()
 
   def _process_line(self):
+    # TODO: remove
+    # self.env_manager.print_env(types=True)
     if self.trace_output:
       print(f"{self.ip:04}: {self.program[self.ip].rstrip()}")
     tokens = self.tokenized_program[self.ip]
@@ -144,14 +146,22 @@ class Interpreter(InterpreterBase):
   def _funccall(self, args):
     if not args:
       super().error(ErrorType.SYNTAX_ERROR,"Missing function name to call", self.ip) #!
+    
+    # TODO: after built-in functions (print, input, etc) are run, the env_manager
+    # pops the most recent scope manually since the IP doesn't run into any
+    # returns in the code. Find a cleaner way to implement this functionality.
+
     if args[0] == InterpreterBase.PRINT_DEF:
       self._print(args[1:])
+      self.env_manager.pop_scope()
       self._advance_to_next_statement()
     elif args[0] == InterpreterBase.INPUT_DEF:
       self._input(args[1:])
+      # self.env_manager.pop_scope()
       self._advance_to_next_statement()
     elif args[0] == InterpreterBase.STRTOINT_DEF:
       self._strtoint(args[1:])
+      # self.env_manager.pop_scope()
       self._advance_to_next_statement()
     else:
       self.return_stack.append(self.ip+1)
