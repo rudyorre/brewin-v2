@@ -1,0 +1,9 @@
+func main void
+    var int b c d  # b, c, and d
+    assign b 5
+    funccall print b
+
+    var bool e
+    assign e "foobar"
+    funccall print e
+endfunc

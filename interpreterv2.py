@@ -4,15 +4,20 @@ from env_v1 import EnvironmentManager
 from tokenize import Tokenizer
 from func_v1 import FunctionManager
 
-# Enumerated type for our different language data types
 class Type(Enum):
+  '''
+  Enumerated type for our different language data types.
+  '''
   INT = 1
   BOOL = 2
   STRING = 3
+  
 
-# Represents a value, which has a type and its value
 class Value:
-  def __init__(self, type, value = None):
+  '''
+  Represents a value, which has a type and its value.
+  '''
+  def __init__(self, type: Type, value=None):
     self.t = type
     self.v = value
 
@@ -26,15 +31,19 @@ class Value:
   def type(self):
     return self.t
 
-# Main interpreter class
 class Interpreter(InterpreterBase):
+  '''
+  Main interpreter class
+  '''
   def __init__(self, console_output=True, input=None, trace_output=False):
     super().__init__(console_output, input)
     self._setup_operations()  # setup all valid binary operations and the types they work on
     self.trace_output = trace_output
 
-  # run a program, provided in an array of strings, one string per line of source code
   def run(self, program):
+    '''
+    Run a program, provided in an array of strings, one string per line of source code.
+    '''
     self.program = program
     self._compute_indentation(program)  # determine indentation of every line
     self.tokenized_program = Tokenizer.tokenize_program(program)
@@ -59,6 +68,8 @@ class Interpreter(InterpreterBase):
     args = tokens[1:]
 
     match tokens[0]:
+      case InterpreterBase.VAR_DEF:
+        self._var(args)
       case InterpreterBase.ASSIGN_DEF:
         self._assign(args)
       case InterpreterBase.FUNCCALL_DEF:
@@ -83,13 +94,40 @@ class Interpreter(InterpreterBase):
   def _blank_line(self):
     self._advance_to_next_statement()
 
-  def _assign(self, tokens):
-   if len(tokens) < 2:
-     super().error(ErrorType.SYNTAX_ERROR,"Invalid assignment statement") #no
-   vname = tokens[0]
-   value_type = self._eval_expression(tokens[1:])
-   self._set_value(tokens[0], value_type)
-   self._advance_to_next_statement()
+  def _var(self, tokens):
+    if len(tokens) < 2:
+      super().error(ErrorType.SYNTAX_ERROR, 'Invalid variable definition')
+    
+    var_type = {
+      InterpreterBase.INT_DEF : Type.INT,
+      InterpreterBase.BOOL_DEF : Type.BOOL,
+      InterpreterBase.STRING_DEF : Type.STRING,
+    }[tokens[0]]
+
+    for var_name in tokens[1:]:
+      self._set_value(var_name, Value(var_type, None))
+    
+    self._advance_to_next_statement()
+
+  def _assign(self, tokens) -> None:
+    '''
+    All variables must be defined before they are used, so assignment will
+    occur only if the variable already exists within the environment manager
+    and the assignment value type matches the variable type.
+    '''
+    var_name = tokens[0]
+    value = self._eval_expression(tokens[1:])
+
+    if len(tokens) < 2:
+      super().error(ErrorType.SYNTAX_ERROR, 'Invalid assignment statement') #no
+    if not self.env_manager.exists(var_name):
+      super().error(ErrorType.NAME_ERROR, f'Unable to locate variable: `{var_name}`', self.ip)
+    env_var_type = self.env_manager.get(var_name).type()
+    if env_var_type != value.type():
+      super().error(ErrorType.TYPE_ERROR, f'Mismatching types {env_var_type} and {value.type()}', self.ip)
+
+    self._set_value(tokens[0], value)
+    self._advance_to_next_statement()
 
   def _funccall(self, args):
     if not args:
@@ -221,6 +259,9 @@ class Interpreter(InterpreterBase):
 
   # create a lookup table of code to run for different operators on different types
   def _setup_operations(self):
+    '''
+    Creates a lookup table of code to run for different operators on different types.
+    '''
     self.binary_op_list = ['+','-','*','/','%','==','!=', '<', '<=', '>', '>=', '&', '|']
     self.binary_ops = {}
     self.binary_ops[Type.INT] = {
@@ -261,8 +302,10 @@ class Interpreter(InterpreterBase):
       super().error(ErrorType.NAME_ERROR,f"Unable to locate {funcname} function", self.ip) #!
     return func_info.start_ip
 
-  # given a token name (e.g., x, 17, True, "foo"), give us a Value object associated with it
   def _get_value(self, token):
+    '''
+    Given a token name (e.g., x, 17, True, "foo"), give us a Value object associated with it.
+    '''
     if not token:
       super().error(ErrorType.NAME_ERROR,f"Empty token", self.ip) #no
     if token[0] == '"':
@@ -276,12 +319,16 @@ class Interpreter(InterpreterBase):
       super().error(ErrorType.NAME_ERROR,f"Unknown variable {token}", self.ip) #!
     return value
 
-  # given a variable name and a Value object, associate the name with the value
-  def _set_value(self, varname, value_type):
-    self.env_manager.set(varname,value_type)
+  def _set_value(self, varname: str, value_type: Value) -> None:
+    '''
+    Given a variable name and a Value object, associate the name with the value.
+    '''
+    self.env_manager.set(varname, value_type)
 
-  # evaluate expressions in prefix notation: + 5 * 6 x
-  def _eval_expression(self, tokens):
+  def _eval_expression(self, tokens) -> Value:
+    '''
+    Evaluate expressions in prefix notation: + 5 * 6 x.
+    '''
     stack = []
 
     for token in reversed(tokens):
