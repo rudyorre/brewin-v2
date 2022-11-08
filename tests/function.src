@@ -1,0 +1,12 @@
+func f
+    var string a
+    assign a "hello"
+endfunc
+
+func main
+    var int a
+    assign a 4
+    funccall f
+    funccall print a
+    # assign a "world"
+endfunc

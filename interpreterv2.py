@@ -73,21 +73,30 @@ class Interpreter(InterpreterBase):
       case InterpreterBase.ASSIGN_DEF:
         self._assign(args)
       case InterpreterBase.FUNCCALL_DEF:
+        self.env_manager.push_scope()
         self._funccall(args)
       case InterpreterBase.ENDFUNC_DEF:
         self._endfunc()
+        self.env_manager.pop_scope()
       case InterpreterBase.IF_DEF:
+        self.env_manager.push_scope()
         self._if(args)
       case InterpreterBase.ELSE_DEF:
+        self.env_manager.pop_scope()
+        self.env_manager.push_scope()
         self._else()
       case InterpreterBase.ENDIF_DEF:
         self._endif()
+        self.env_manager.pop_scope()
       case InterpreterBase.RETURN_DEF:
         self._return(args)
+        self.env_manager.pop_scope()
       case InterpreterBase.WHILE_DEF:
+        self.env_manager.push_scope()
         self._while(args)
       case InterpreterBase.ENDWHILE_DEF:
         self._endwhile(args)
+        self.env_manager.pop_scope()
       case default:
         raise Exception(f'Unknown command: {tokens[0]}')
 
@@ -105,7 +114,10 @@ class Interpreter(InterpreterBase):
     }[tokens[0]]
 
     for var_name in tokens[1:]:
-      self._set_value(var_name, Value(var_type, None))
+      if self.env_manager.exists_scope(var_name):
+        super().error(ErrorType.NAME_ERROR, f'Conflicting variable declaration `{var_name}`')
+      self.env_manager.add(var_name, Value(var_type, None))
+      # self._set_value(var_name, Value(var_type, None))
     
     self._advance_to_next_statement()
 

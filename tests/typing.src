@@ -1,0 +1,8 @@
+func main void
+    var int b c d       # b,c, and d are integer variables
+    assign b 5
+    funccall print b
+
+    var bool e          # e is a boolean variable
+    assign e "foobar"   # this would be a type error!
+endfunc
