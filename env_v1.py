@@ -52,6 +52,13 @@ class EnvironmentManager:
         # If the variable doesn't already exist, add it to the most recent scope
         self.environment[-1][symbol] = value
 
+    def set_return(self, value):
+        '''
+        Sets the global return value (based by type eventually). To make it
+        global, this will be in the top-level scope.
+        '''
+        self.environment[0]['return'] = value
+
     def push_scope(self):
         '''Creates a new scope.'''
         self.environment.append(dict())
@@ -68,11 +75,7 @@ class EnvironmentManager:
         for scope in self.environment:
             print(' { ', end='')
             for (name, value) in scope.items():
-                print(name, end=' ')
-                if types:
-                    print(value.type(), end=' ')
-                if values:
-                    print(value.value(), end=' ')
+                print(f'{name}: {value.type()} {value.value()}', end=', ')
             print('}')
         print(']')
                 

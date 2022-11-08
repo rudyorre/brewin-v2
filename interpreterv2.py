@@ -115,10 +115,16 @@ class Interpreter(InterpreterBase):
       InterpreterBase.STRING_DEF : Type.STRING,
     }[tokens[0]]
 
+    var_value = {
+      InterpreterBase.INT_DEF : 0,
+      InterpreterBase.BOOL_DEF : False,
+      InterpreterBase.STRING_DEF : "",
+    }[tokens[0]]
+
     for var_name in tokens[1:]:
       if self.env_manager.exists_scope(var_name):
         super().error(ErrorType.NAME_ERROR, f'Conflicting variable declaration `{var_name}`')
-      self.env_manager.add(var_name, Value(var_type, None))
+      self.env_manager.add(var_name, Value(var_type, var_value))
       # self._set_value(var_name, Value(var_type, None))
     
     self._advance_to_next_statement()
@@ -179,6 +185,7 @@ class Interpreter(InterpreterBase):
     value_type = self._eval_expression(args)
     if value_type.type() != Type.BOOL:
       super().error(ErrorType.TYPE_ERROR,"Non-boolean if expression", self.ip) #!
+    
     if value_type.value():
       self._advance_to_next_statement()
       return
@@ -202,6 +209,7 @@ class Interpreter(InterpreterBase):
         continue
       if tokens[0] == InterpreterBase.ENDIF_DEF and self.indents[self.ip] == self.indents[line_num]:
           self.ip = line_num + 1
+          self.env_manager.pop_scope() # TODO: not sure if this is good placement or not
           return
     super().error(ErrorType.SYNTAX_ERROR,"Missing endif", self.ip) #no
 
@@ -209,8 +217,9 @@ class Interpreter(InterpreterBase):
     if not args:
       self._endfunc()
       return
-    value_type = self._eval_expression(args)
-    self._set_value(InterpreterBase.RESULT_DEF, value_type)   # return always passed back in result
+    value = self._eval_expression(args)
+    # self._set_value(InterpreterBase.RESULT_DEF, value_type)   # return always passed back in result
+    self.env_manager.set_return(value)
     self._endfunc()
 
   def _while(self, args):

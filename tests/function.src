@@ -1,17 +1,23 @@
-func f
-    funccall print a  # print 5
-    var string a
-    assign a "foobar"
-    funccall print a  # print foobar
-    var bool b
+# Equivalent to bool absval(int val, int& change_me)
+# func absval val:int change_me:refint bool
+func absval
+    var bool ret
+    if < val 0
+        # assign change_me * -1 val
+        assign ret True
+        return True
+    else
+        # assign change_me val
+        # return False
+    endif
+    return ret
 endfunc
 
-func main
-    var int a
-    assign a 5
-    funccall f
-    funccall print a # print 5
-    funccall print b # name error b is out of scope
-    var int c
-    assign c 1
+func main void
+    var int val output
+    assign val -5
+    # funccall absval val outputfunccall print "The absolute value is: " output
+    # funccall print "Did I negate the input value? " result
+    funccall print val
+    funccall print output
 endfunc
