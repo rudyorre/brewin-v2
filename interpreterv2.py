@@ -1,35 +1,9 @@
 from enum import Enum
 from intbase import InterpreterBase, ErrorType
+from value import Type, Value
 from env_v1 import EnvironmentManager
 from tokenize import Tokenizer
 from func_v1 import FunctionManager
-
-class Type(Enum):
-  '''
-  Enumerated type for our different language data types.
-  '''
-  INT = 1
-  BOOL = 2
-  STRING = 3
-  
-
-class Value:
-  '''
-  Represents a value, which has a type and its value.
-  '''
-  def __init__(self, type: Type, value=None):
-    self.t = type
-    self.v = value
-
-  def value(self):
-    return self.v
-
-  def set(self, other):
-    self.t = other.t
-    self.v = other.v
-
-  def type(self):
-    return self.t
 
 class Interpreter(InterpreterBase):
   '''
@@ -59,7 +33,7 @@ class Interpreter(InterpreterBase):
 
   def _process_line(self):
     # TODO: remove
-    self.env_manager.print_env(types=True)
+    # self.env_manager.print_env(types=True)
     if self.trace_output:
       print(f"{self.ip:04}: {self.program[self.ip].rstrip()}")
     tokens = self.tokenized_program[self.ip]
@@ -171,7 +145,7 @@ class Interpreter(InterpreterBase):
       self._advance_to_next_statement()
     else:
       self.return_stack.append(self.ip+1)
-      self.ip = self._find_first_instruction(args[0])
+      self.ip = self._find_first_instruction(args[0], args[1:])
 
   def _endfunc(self):
     if not self.return_stack:  # done with main!
@@ -342,10 +316,23 @@ class Interpreter(InterpreterBase):
   def _compute_indentation(self, program):
     self.indents = [len(line) - len(line.lstrip(' ')) for line in program]
 
-  def _find_first_instruction(self, funcname):
+  def _find_first_instruction(self, funcname, args=[]):
     func_info = self.func_manager.get_function_info(funcname)
     if func_info == None:
       super().error(ErrorType.NAME_ERROR,f"Unable to locate {funcname} function", self.ip) #!
+
+    # TODO: Validate lengths of args and function_info.parameters matches
+    # Add parameters to scope
+    for i in range(len(args)):
+      var_name, param_name = args[i], func_info.names[i]
+      if not self.env_manager.exists(var_name):
+        super().error(ErrorType.NAME_ERROR,f'Unknown variable {var_name}', self.ip) #!
+      
+      if func_info.values[i].ref:
+        self.env_manager.add(param_name, self.env_manager.get(var_name))
+      else:
+        self.env_manager.add(param_name, self.env_manager.get(var_name).deepcopy())
+
     return func_info.start_ip
 
   def _get_value(self, token):

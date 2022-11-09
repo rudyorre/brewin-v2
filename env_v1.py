@@ -46,7 +46,8 @@ class EnvironmentManager:
         # Assign value to most recent occurrence of the variable
         for scope in reversed(self.environment):
             if symbol in scope:
-                scope[symbol] = value
+                # scope[symbol] = scope
+                scope[symbol].v = value.v
                 return
 
         # If the variable doesn't already exist, add it to the most recent scope

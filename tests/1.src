@@ -1,0 +1,30 @@
+func absval val:int change_me:refint bool
+    if < val 0
+        assign change_me * -1 val
+        return True
+    else
+        assign change_me val
+        return False
+    endif
+endfunc
+
+func f y:refint void
+    funccall g y
+endfunc
+
+func g z:int void
+    assign z 3
+endfunc
+
+func main void
+    var int val output
+    assign val -5
+    # funccall absval val output
+    # funccall print "result: " resultb
+    # funccall print "output: " output
+
+    var int x
+    assign x 1
+    funccall f x
+    funccall print x
+endfunc
