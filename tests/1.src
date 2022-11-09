@@ -1,21 +1,20 @@
-# recursive fibonacci :)
-# this might take a bit of time! 
+func foo int
+    return 1
+endfunc
 
-func fib n:int int
-  if <= n 1
-    return n
-  endif
-  var int n1 n2 res
-  assign n1 - n 1
-  assign n2 - n 2
-  funccall fib n1
-  assign res + res resulti
-  funccall fib n2
-  assign res + res resulti
-  return res
+func bar void
+    funccall foobar
+    funccall print resulti # prints 2
+endfunc
+
+func foobar int
+    return 2
 endfunc
 
 func main void
-  funccall fib 15
-  funccall print resulti
+    if True
+        funccall foo 
+    endif
+    funccall bar  
+    funccall print resulti # prints 1
 endfunc

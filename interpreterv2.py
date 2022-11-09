@@ -2,7 +2,7 @@ from enum import Enum
 from intbase import InterpreterBase, ErrorType
 from value import Type, Value
 from env_v1 import EnvironmentManager
-from tokenize import Tokenizer
+from tokenizer import Tokenizer
 from func_v1 import FunctionManager
 
 class Interpreter(InterpreterBase):
@@ -376,8 +376,8 @@ class Interpreter(InterpreterBase):
         # self.env_manager.add(param_name, var.deepcopy())
 
     # TODO: check back on env clearing
-    #if funcname != InterpreterBase.MAIN_FUNC:
-    #  self.env_manager.clear_environment()
+    # if funcname != InterpreterBase.MAIN_FUNC:
+    #   self.env_manager.clear_environment()
 
     for i in range(len(param_names)):
       self.env_manager.add(param_names[i], vars[i])
