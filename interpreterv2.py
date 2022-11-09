@@ -346,8 +346,8 @@ class Interpreter(InterpreterBase):
         # self.env_manager.add(param_name, var.deepcopy())
 
     # TODO: check back on env clearing
-    if funcname != InterpreterBase.MAIN_FUNC:
-      self.env_manager.clear_environment()
+    #if funcname != InterpreterBase.MAIN_FUNC:
+    #  self.env_manager.clear_environment()
 
     for i in range(len(param_names)):
       self.env_manager.add(param_names[i], vars[i])
