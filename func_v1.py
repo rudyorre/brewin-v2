@@ -42,6 +42,8 @@ class FunctionManager:
         # Enumerate every line in the tokenized list
         for line_num, line in enumerate(tokenized_program):
             if line and line[0] == InterpreterBase.FUNC_DEF:
+                if len(line) < 3:
+                    InterpreterBase.error(ErrorType.SYNTAX_ERROR, 'Invalid function declaration')
                 # Set the function name and store line_num
                 func_name = line[1]
                 func_info = FuncInfo(line_num + 1)   # function starts executing on line after funcdef

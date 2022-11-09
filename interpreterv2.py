@@ -206,6 +206,11 @@ class Interpreter(InterpreterBase):
     while doing so it will pop a scope for every `end` statement it finds.
     '''
     return_type = self.env_manager.return_stack[-1]
+
+    # If no arguments come with the return statement, the function
+    # will return the default value for whatever its return type is.
+    # TODO: move this code to _endfunc() so even if there isn't a return
+    # statement, the function can return a default value
     if not args:
       match return_type:
         case Type.INT:
@@ -216,10 +221,20 @@ class Interpreter(InterpreterBase):
           self.env_manager.set_return('results', Value(Type.STRING, ''))
       self._endfunc()
       return
+
+    # Get the return type associated with this function
     value = self._eval_expression(args)
-    # self._set_value(InterpreterBase.RESULT_DEF, value_type)   # return always passed back in result
+    var_type = value.type()
+
+    if return_type != var_type:
+      super().error(ErrorType.TYPE_ERROR, 'Invalid return value type', self.ip)
+    
+    # Set the respective global result variable with return value
     symbol = {Type.INT : 'resulti', Type.BOOL : 'resultb', Type.STRING : 'results'}[value.type()]
     self.env_manager.set_return(symbol, value)
+
+    # When returning, we must break out of any nested structures within the function
+    # by clearing any scoped environments until we find ENDFUNC
     for line_num in range(self.ip + 1, len(self.tokenized_program)):
       tokens = self.tokenized_program[line_num]
       if not tokens:
