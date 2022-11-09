@@ -278,7 +278,7 @@ class Interpreter(InterpreterBase):
     value_type = self._get_value(args[0])
     if value_type.type() != Type.STRING:
       super().error(ErrorType.TYPE_ERROR,"Non-string passed to strtoint", self.ip) #!
-    self._set_value(InterpreterBase.RESULT_DEF, Value(Type.INT, int(value_type.value())))   # return always passed back in result
+    self.env_manager.set_return(InterpreterBase.RESULT_DEF + 'i', Value(Type.INT, int(value_type.value()))) # return always passed back in `resulti`
 
   def _advance_to_next_statement(self):
     # for now just increment IP, but later deal with loops, returns, end of functions, etc.
