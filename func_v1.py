@@ -58,7 +58,7 @@ class FunctionManager:
                         var_type = util.string_to_type(var_type[3:])
                         value = Value(var_type, None, ref=True)
                     func_info.add_parameter(symbol, value)
-                    print(value.type(), value.value(), value.ref)
+                    # print(value.type(), value.value(), value.ref)
 
                 # Set the return type of this function
                 func_info.set_return_type(util.string_to_type(line[-1]))

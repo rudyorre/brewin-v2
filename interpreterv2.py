@@ -325,13 +325,15 @@ class Interpreter(InterpreterBase):
     # Add parameters to scope
     for i in range(len(args)):
       var_name, param_name = args[i], func_info.names[i]
-      if not self.env_manager.exists(var_name):
-        super().error(ErrorType.NAME_ERROR,f'Unknown variable {var_name}', self.ip) #!
+      
+      #if not self.env_manager.exists(var_name):
+      #  super().error(ErrorType.NAME_ERROR,f'Unknown variable {var_name}', self.ip) #!
+      var = self._get_value(var_name)
       
       if func_info.values[i].ref:
-        self.env_manager.add(param_name, self.env_manager.get(var_name))
+        self.env_manager.add(param_name, var)
       else:
-        self.env_manager.add(param_name, self.env_manager.get(var_name).deepcopy())
+        self.env_manager.add(param_name, var.deepcopy())
 
     return func_info.start_ip
 
