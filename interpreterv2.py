@@ -214,6 +214,8 @@ class Interpreter(InterpreterBase):
         continue
       if tokens[0] == InterpreterBase.ENDIF_DEF or tokens[0] == InterpreterBase.ENDWHILE_DEF:
         self.env_manager.pop_scope() # TODO: not sure if this is good placement or not
+      if tokens[0] == InterpreterBase.ENDFUNC_DEF:
+        break
     self._endfunc()
 
   def _while(self, args):
@@ -268,7 +270,7 @@ class Interpreter(InterpreterBase):
     if args:
       self._print(args)
     result = super().get_input()
-    self._set_value(InterpreterBase.RESULT_DEF, Value(Type.STRING, result))   # return always passed back in result
+    self.env_manager.set_return(InterpreterBase.RESULT_DEF + 's', Value(Type.STRING, result)) # return always passed back in `results`` 
 
   def _strtoint(self, args):
     if len(args) != 1:

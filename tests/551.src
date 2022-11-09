@@ -1,0 +1,14 @@
+func foo arg:int void
+    if > arg 5
+        funccall input "Enter your name: "
+    else
+        funccall input "Enter your dog’s name: "
+    endif
+    # notice how results is referred to outside the block where
+    # we called input to get the name.
+    funccall print "You entered: " results
+endfunc
+
+func main void
+    funccall foo 5
+endfunc

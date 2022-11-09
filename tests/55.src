@@ -1,0 +1,19 @@
+func bar int
+    var int 4
+    return -197
+endfunc
+
+func foo void
+    var int 2
+    if True
+        var int 3
+        funccall bar            # resulti is set upon return from bar
+        funccall print resulti          # valid since resulti is in scope
+    endif    
+    funccall print resulti                      # also valid since resulti has top-level scope
+endfunc
+
+func main void
+    var int 1
+    funccall foo
+endfunc
