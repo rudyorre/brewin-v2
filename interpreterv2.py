@@ -19,13 +19,13 @@ class Interpreter(InterpreterBase):
     Run a program, provided in an array of strings, one string per line of source code.
     '''
     self.program = program
+    self.env_manager = EnvironmentManager() # used to track variables/scope
     self._compute_indentation(program)  # determine indentation of every line
     self.tokenized_program = Tokenizer.tokenize_program(program)
     self.func_manager = FunctionManager(self.tokenized_program)
     self.ip = self._find_first_instruction(InterpreterBase.MAIN_FUNC)
     self.return_stack = []
     self.terminate = False
-    self.env_manager = EnvironmentManager() # used to track variables/scope
 
     # main interpreter run loop
     while not self.terminate:
@@ -158,6 +158,8 @@ class Interpreter(InterpreterBase):
     else:
       self.ip = self.return_stack.pop()
 
+    self.env_manager.return_stack.pop()
+
   def _if(self, args):
     if not args:
       super().error(ErrorType.SYNTAX_ERROR,"Invalid if syntax", self.ip) #no
@@ -201,7 +203,15 @@ class Interpreter(InterpreterBase):
     will parse through the rest of the user-defined function until it finds an `endfunc` statement,
     while doing so it will pop a scope for every `end` statement it finds.
     '''
+    return_type = self.env_manager.return_stack[-1]
     if not args:
+      match return_type:
+        case Type.INT:
+          self.env_manager.set_return('resulti', Value(Type.INT, 0))
+        case Type.BOOL:
+          self.env_manager.set_return('resultb', Value(Type.BOOL, False))
+        case Type.STRING:
+          self.env_manager.set_return('results', Value(Type.STRING, ''))
       self._endfunc()
       return
     value = self._eval_expression(args)
@@ -351,6 +361,9 @@ class Interpreter(InterpreterBase):
 
     for i in range(len(param_names)):
       self.env_manager.add(param_names[i], vars[i])
+    
+    # Store what the return type is
+    self.env_manager.return_stack.append(func_info.return_type)
 
     return func_info.start_ip
 

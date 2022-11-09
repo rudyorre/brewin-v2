@@ -63,5 +63,8 @@ class FunctionManager:
                 # Set the return type of this function
                 func_info.set_return_type(util.string_to_type(line[-1]))
 
+                if func_info.return_type == Type.REFBOOL or func_info.return_type == Type.REFINT or func_info.return_type == Type.REFSTRING:
+                    InterpreterBase.error(ErrorType.TYPE_ERROR, 'Invalid return type')
+
                 self.func_cache[func_name] = func_info
        

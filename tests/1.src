@@ -1,9 +1,13 @@
-# define variable in main, make sure it's not in scope in called fn
-func main void
- var int a
- funccall foo
-endfunc main
-
+# expects type error
 func foo void
- funccall print a
+    return 5
+endfunc
+
+func boo string
+    return
+endfunc
+
+func main void
+    funccall boo
+    funccall print results
 endfunc

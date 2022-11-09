@@ -21,6 +21,7 @@ class EnvironmentManager:
         '''
         self.environment = [{}, {}]
         self.prev_environments = []
+        self.return_stack = []
 
     def exists(self, symbol):
         '''Returns true if the variable exists.'''
