@@ -192,7 +192,7 @@ class Interpreter(InterpreterBase):
         continue
       if tokens[0] == InterpreterBase.ENDIF_DEF and self.indents[self.ip] == self.indents[line_num]:
           self.ip = line_num + 1
-          self.env_manager.pop_scope() # TODO: not sure if this is good placement or not
+          self.env_manager.pop_scope()
           return
     super().error(ErrorType.SYNTAX_ERROR,"Missing endif", self.ip) #no
 
@@ -240,7 +240,7 @@ class Interpreter(InterpreterBase):
       if not tokens:
         continue
       if tokens[0] == InterpreterBase.ENDIF_DEF or tokens[0] == InterpreterBase.ENDWHILE_DEF:
-        self.env_manager.pop_scope() # TODO: not sure if this is good placement or not
+        self.env_manager.pop_scope()
       if tokens[0] == InterpreterBase.ENDFUNC_DEF:
         break
     self._endfunc()
@@ -356,7 +356,9 @@ class Interpreter(InterpreterBase):
     if func_info == None:
       super().error(ErrorType.NAME_ERROR,f"Unable to locate {funcname} function", self.ip) #!
 
-    # TODO: Validate lengths of args and function_info.parameters matches
+    if len(func_info.names) != len(args):
+        super().error(ErrorType.NAME_ERROR, 'Invalid number of arguments supplied', self.ip)
+    
     # Add parameters to scope
     param_names, vars = [], []
     for i in range(len(args)):
