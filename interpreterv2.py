@@ -154,13 +154,22 @@ class Interpreter(InterpreterBase):
       self.return_stack.append(self.ip+1)
       self.ip = self._find_first_instruction(args[0], args[1:])
 
-  def _endfunc(self):
+  def _endfunc(self, default_return=True):
     if not self.return_stack:  # done with main!
       self.terminate = True
     else:
       self.ip = self.return_stack.pop()
 
-    self.env_manager.return_stack.pop()
+    return_type = self.env_manager.return_stack.pop()
+
+    if default_return:
+      match return_type:
+          case Type.INT:
+            self.env_manager.set_return('resulti', Value(Type.INT, 0))
+          case Type.BOOL:
+            self.env_manager.set_return('resultb', Value(Type.BOOL, False))
+          case Type.STRING:
+            self.env_manager.set_return('results', Value(Type.STRING, ''))
 
   def _if(self, args):
     if not args:
@@ -212,14 +221,7 @@ class Interpreter(InterpreterBase):
     # TODO: move this code to _endfunc() so even if there isn't a return
     # statement, the function can return a default value
     if not args:
-      match return_type:
-        case Type.INT:
-          self.env_manager.set_return('resulti', Value(Type.INT, 0))
-        case Type.BOOL:
-          self.env_manager.set_return('resultb', Value(Type.BOOL, False))
-        case Type.STRING:
-          self.env_manager.set_return('results', Value(Type.STRING, ''))
-      self._endfunc()
+      self._endfunc(default_return=True)
       return
 
     # Get the return type associated with this function
@@ -243,7 +245,7 @@ class Interpreter(InterpreterBase):
         self.env_manager.pop_scope()
       if tokens[0] == InterpreterBase.ENDFUNC_DEF:
         break
-    self._endfunc()
+    self._endfunc(default_return=False)
 
   def _while(self, args):
     if not args:

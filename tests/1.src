@@ -1,16 +1,16 @@
-func foo m:int n:int int
-   return + m n
-endfunc
+# test default return values
 
-func bar arg:int args:string void # ???
+func foo int
     return
 endfunc
 
-func main void
-   var int a
-   var string b
-   assign a 10000
-   funccall foo a a # 0 0 is passed
-   funccall print resulti
-   funccall bar a a
+func bar bool
 endfunc
+
+func main void
+    funccall foo
+    funccall bar
+    funccall print resulti " " resultb
+endfunc
+
+# 0 False
