@@ -30,6 +30,8 @@ class Interpreter(InterpreterBase):
     # main interpreter run loop
     while not self.terminate:
       self._process_line()
+    
+    # self.env_manager.print_env()
 
   def _process_line(self):
     # TODO: remove
@@ -247,6 +249,7 @@ class Interpreter(InterpreterBase):
     while cur_line < len(self.tokenized_program):
       if self.tokenized_program[cur_line][0] == InterpreterBase.ENDWHILE_DEF and self.indents[cur_line] == while_indent:
         self.ip = cur_line + 1
+        self.env_manager.pop_scope()
         return
       if self.tokenized_program[cur_line] and self.indents[cur_line] < self.indents[self.ip]:
         break # syntax error!

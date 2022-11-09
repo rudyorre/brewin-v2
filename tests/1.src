@@ -1,13 +1,45 @@
-# expects type error
-func foo void
-    return 5
-endfunc
-
-func boo string
-    return
-endfunc
-
 func main void
-    funccall boo
-    funccall print results
+    var int a
+    assign a 5
+    if True
+        funccall print a # print 5
+        var string b
+        assign b "foobar"
+        if True
+            funccall print a " " b # print 5 foobar
+            var int b
+            assign b 1
+            while > b 0
+                var bool c
+                assign c True
+                funccall print a " " b " " c # print 1 True
+                assign b - b 1
+            endwhile
+        endif
+        funccall print b
+    endif
 endfunc
+
+func f void
+    var int i
+    assign i 0
+    while < i 5
+        funccall print i
+        assign i + i 1
+    endwhile
+endfunc
+
+func main1 void
+    var int i
+    assign i 0
+    while < i 5
+        funccall print i
+        assign i + i 1
+    endwhile
+endfunc
+
+# Expects:
+# 5
+# 5 foobar
+# 5 1 True
+# foobar
