@@ -67,6 +67,11 @@ class EnvironmentManager:
         '''
         self.environment[0][symbol] = value
 
+    def clear_environment(self):
+        '''Clears the current environment (except 0th scope)'''
+        self.prev_environments.append(self.environment)
+        self.environment = [{}, {}]
+
     def push_scope(self):
         '''Creates a new scope.'''
         self.environment.append(dict())
