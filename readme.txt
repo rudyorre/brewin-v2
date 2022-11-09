@@ -1,1 +1,2 @@
-Right now, the program doesn't work!
+- functions can access variables outside of its scope
+- nothing enforcing the return types

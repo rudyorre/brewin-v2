@@ -1,11 +1,9 @@
+# define variable in main, make sure it's not in scope in called fn
 func main void
-    var string first last year_of_birth
-    funccall input "First Name:"
-    assign first results
-    funccall input "Last Name:"
-    assign last results
-    funccall input "Year of Birth:"
-    assign year_of_birth results
+ var int a
+ funccall foo
+endfunc main
 
-    funccall print "Hello " first " " last ", your birthday is " year_of_birth
+func foo void
+ funccall print a
 endfunc
