@@ -330,6 +330,7 @@ class Interpreter(InterpreterBase):
 
     # TODO: Validate lengths of args and function_info.parameters matches
     # Add parameters to scope
+    param_names, vars = [], []
     for i in range(len(args)):
       var_name, param_name = args[i], func_info.names[i]
       
@@ -337,10 +338,18 @@ class Interpreter(InterpreterBase):
       #  super().error(ErrorType.NAME_ERROR,f'Unknown variable {var_name}', self.ip) #!
       var = self._get_value(var_name)
       
+      param_names.append(param_name)
       if func_info.values[i].ref:
-        self.env_manager.add(param_name, var)
+        vars.append(var)
       else:
-        self.env_manager.add(param_name, var.deepcopy())
+        vars.append(var.deepcopy())
+        # self.env_manager.add(param_name, var.deepcopy())
+
+    if funcname != InterpreterBase.MAIN_FUNC:
+      self.env_manager.clear_environment()
+
+    for i in range(len(param_names)):
+      self.env_manager.add(param_names[i], vars[i])
 
     return func_info.start_ip
 

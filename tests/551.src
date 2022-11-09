@@ -11,4 +11,5 @@ endfunc
 
 func main void
     funccall foo 5
+    funccall print "You entered: .... " results
 endfunc

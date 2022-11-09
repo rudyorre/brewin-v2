@@ -19,7 +19,7 @@ class EnvironmentManager:
         self.environment starts with two scopes because the 0th scope is for global variables like resulti, whereas
         the 1st scope is where the first declared variables will be stored.
         '''
-        self.environment = [{}]
+        self.environment = [{}, {}]
         self.prev_environments = []
 
     def exists(self, symbol):
@@ -69,8 +69,8 @@ class EnvironmentManager:
 
     def clear_environment(self):
         '''Clears the current environment (except 0th scope)'''
-        self.prev_environments.append(self.environment)
-        self.environment = [{}, {}]
+        self.prev_environments.append(self.environment[1:])
+        self.environment = self.environment[:1] + [{}]
 
     def push_scope(self):
         '''Creates a new scope.'''
@@ -82,6 +82,9 @@ class EnvironmentManager:
         variables defined within this scope.
         '''
         self.environment.pop()
+        if len(self.environment) == 1 and len(self.prev_environments) > 0:
+            environment = self.prev_environments.pop()
+            self.environment += environment
 
     def print_env(self, values=True, types=False):
         print('[')
