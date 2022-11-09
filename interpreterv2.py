@@ -264,7 +264,7 @@ class Interpreter(InterpreterBase):
     while_indent = self.indents[self.ip]
     cur_line = self.ip + 1
     while cur_line < len(self.tokenized_program):
-      if self.tokenized_program[cur_line][0] == InterpreterBase.ENDWHILE_DEF and self.indents[cur_line] == while_indent:
+      if len(self.tokenized_program[cur_line]) > 0 and self.tokenized_program[cur_line][0] == InterpreterBase.ENDWHILE_DEF and self.indents[cur_line] == while_indent:
         self.ip = cur_line + 1
         self.env_manager.pop_scope()
         return
@@ -278,7 +278,7 @@ class Interpreter(InterpreterBase):
     while_indent = self.indents[self.ip]
     cur_line = self.ip - 1
     while cur_line >= 0:
-      if self.tokenized_program[cur_line][0] == InterpreterBase.WHILE_DEF and self.indents[cur_line] == while_indent:
+      if len(self.tokenized_program[cur_line]) > 0 and self.tokenized_program[cur_line][0] == InterpreterBase.WHILE_DEF and self.indents[cur_line] == while_indent:
         self.ip = cur_line
         return
       if self.tokenized_program[cur_line] and self.indents[cur_line] < self.indents[self.ip]:

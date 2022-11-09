@@ -1,16 +1,8 @@
-# test default return values
-
-func foo int
-    return
-endfunc
-
-func bar bool
-endfunc
-
 func main void
-    funccall foo
-    funccall bar
-    funccall print resulti " " resultb
+    var int a
+    while < a 10
+        # hello
+        assign a + a 1
+    endwhile
+    funccall print a
 endfunc
-
-# 0 False
