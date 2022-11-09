@@ -1,9 +1,11 @@
-func foo void
-    # error - blah is NOT known to foo(), only to main()
-    funccall print blah  
-endfunc
-
 func main void
-    var int blah
-    funccall foo 
+    var string first last year_of_birth
+    funccall input "First Name:"
+    assign first results
+    funccall input "Last Name:"
+    assign last results
+    funccall input "Year of Birth:"
+    assign year_of_birth results
+
+    funccall print "Hello " first " " last ", your birthday is " year_of_birth
 endfunc

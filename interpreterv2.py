@@ -33,7 +33,7 @@ class Interpreter(InterpreterBase):
 
   def _process_line(self):
     # TODO: remove
-    # self.env_manager.print_env(types=True)
+    self.env_manager.print_env(types=True)
     if self.trace_output:
       print(f"{self.ip:04}: {self.program[self.ip].rstrip()}")
     tokens = self.tokenized_program[self.ip]
@@ -142,11 +142,11 @@ class Interpreter(InterpreterBase):
       self._advance_to_next_statement()
     elif args[0] == InterpreterBase.INPUT_DEF:
       self._input(args[1:])
-      # self.env_manager.pop_scope()
+      self.env_manager.pop_scope()
       self._advance_to_next_statement()
     elif args[0] == InterpreterBase.STRTOINT_DEF:
       self._strtoint(args[1:])
-      # self.env_manager.pop_scope()
+      self.env_manager.pop_scope()
       self._advance_to_next_statement()
     else:
       self.return_stack.append(self.ip+1)
