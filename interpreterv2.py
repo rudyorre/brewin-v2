@@ -104,7 +104,7 @@ class Interpreter(InterpreterBase):
 
     for var_name in tokens[1:]:
       if self.env_manager.exists_scope(var_name):
-        super().error(ErrorType.NAME_ERROR, f'Conflicting variable declaration `{var_name}`')
+        super().error(ErrorType.NAME_ERROR, f'Conflicting variable declaration `{var_name}`', self.ip)
       self.env_manager.add(var_name, Value(var_type, var_value))
       # self._set_value(var_name, Value(var_type, None))
     

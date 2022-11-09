@@ -1,9 +1,11 @@
-func foo
- return "blah"
-endfunc
-
 func main void
- funccall foo
+    var string a 
+    assign a "hi"
+    if > 1 0
+        var int b
+        funccall print b
+    endif
+    funccall print a
+    funccall print b
 endfunc
-
-# ErrorType.TYPE_ERROR 1
+#make sure when a block ends, variable in the block goes out of scope
