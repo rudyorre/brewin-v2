@@ -1,44 +1,18 @@
-# Equivalent to bool absval(int val, int& change_me)
-# func absval val:int change_me:refint bool
-func absval
-    var bool ret
-    if < val 0
-        # assign change_me * -1 val
-        assign ret True
-        return True
-    else
-        # assign change_me val
-        # return False
-    endif
-    return ret
-endfunc
-
-func f
-    if True
-        if False
-
-        else
-            if True
-                if False
-
-                else
-
-                endif
-                return True
-            endif
-        endif
-    else
-
-    endif
+func absval val:int change_me:refint bool
+  if < val 0
+    assign change_me * -1 val
+    return True
+  else
+    assign change_me val
+    return False
+  endif
 endfunc
 
 func main void
-    var int val output
-    assign val -5
-    # funccall absval val outputfunccall print "The absolute value is: " output
-    # funccall print "Did I negate the input value? " result
-    # funccall print val
-
-    funccall f
-    funccall print resultb
+  var int val output
+  var rudy orre
+  assign val -5
+  funccall absval val 2
+  funccall print "The absolute value is: " output
+  funccall print "Did I negate the input value? " resultb
 endfunc

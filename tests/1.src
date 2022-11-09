@@ -1,15 +1,9 @@
-func f n:int out:refint void
-    if <= n 0
-        return
-    endif
-    assign out + out 1
-    assign n - n 1
-    funccall f n out
+func foo void
+    # error - blah is NOT known to foo(), only to main()
+    funccall print blah  
 endfunc
 
 func main void
-    var int number output
-    assign number 100000
-    funccall f number output
-    funccall print output
+    var int blah
+    funccall foo 
 endfunc

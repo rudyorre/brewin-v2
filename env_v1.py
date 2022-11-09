@@ -13,7 +13,14 @@ class EnvironmentManager:
     and O(n) space complexity.
     '''
     def __init__(self):
-        self.environment = [{}]
+        '''
+        dwandwadawd
+
+        self.environment starts with two scopes because the 0th scope is for global variables like resulti, whereas
+        the 1st scope is where the first declared variables will be stored.
+        '''
+        self.environment = [{}, {}]
+        self.prev_environments = []
 
     def exists(self, symbol):
         '''Returns true if the variable exists.'''

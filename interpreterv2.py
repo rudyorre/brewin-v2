@@ -83,11 +83,16 @@ class Interpreter(InterpreterBase):
     if len(tokens) < 2:
       super().error(ErrorType.SYNTAX_ERROR, 'Invalid variable definition')
     
-    var_type = {
+    var_types = {
       InterpreterBase.INT_DEF : Type.INT,
       InterpreterBase.BOOL_DEF : Type.BOOL,
       InterpreterBase.STRING_DEF : Type.STRING,
-    }[tokens[0]]
+    }
+
+    if tokens[0] not in var_types:
+      super().error(ErrorType.TYPE_ERROR, f'Invalid type `{tokens[0]}`', self.ip)
+
+    var_type = var_types[tokens[0]]
 
     var_value = {
       InterpreterBase.INT_DEF : 0,
