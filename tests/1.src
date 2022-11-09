@@ -1,20 +1,16 @@
-func foo int
-    return 1
+func foo m:int n:int int
+   return + m n
 endfunc
 
-func bar void
-    funccall foobar
-    funccall print resulti # prints 2
-endfunc
-
-func foobar int
-    return 2
+func bar arg:int args:string void # ???
+    return
 endfunc
 
 func main void
-    if True
-        funccall foo 
-    endif
-    funccall bar  
-    funccall print resulti # prints 1
+   var int a
+   var string b
+   assign a 10000
+   funccall foo a a # 0 0 is passed
+   funccall print resulti
+   funccall bar a a
 endfunc

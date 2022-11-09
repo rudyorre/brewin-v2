@@ -356,6 +356,7 @@ class Interpreter(InterpreterBase):
     if func_info == None:
       super().error(ErrorType.NAME_ERROR,f"Unable to locate {funcname} function", self.ip) #!
 
+    # Check if argument length matches
     if len(func_info.names) != len(args):
         super().error(ErrorType.NAME_ERROR, 'Invalid number of arguments supplied', self.ip)
     
@@ -368,6 +369,11 @@ class Interpreter(InterpreterBase):
       #  super().error(ErrorType.NAME_ERROR,f'Unknown variable {var_name}', self.ip) #!
       var = self._get_value(var_name)
       
+      # Check if var_type matches parameter type
+      if var.type() != func_info.values[i].type():
+        super().error(ErrorType.TYPE_ERROR, 'Invalid argument type supplied', self.ip)
+
+
       param_names.append(param_name)
       if func_info.values[i].ref:
         vars.append(var)
